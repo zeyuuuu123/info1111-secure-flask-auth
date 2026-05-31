@@ -1,0 +1,12 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>New Booking</h1>
+<p class="notice">Step 1 of 4 — Enter class name</p>
+<form method="post" action="/bookings/new/class">
+  <label>Class (e.g., INFO1111)</label>
+  <input type="text" name="class_name" required>
+  <button type="submit">Next</button>
+  <a href="/bookings/new" style="margin-left: 8px;">Cancel / Restart</a>
+</form>
+{% endblock %}

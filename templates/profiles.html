@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>Search Results</h1>
+<!-- <p class="notice">This page exposes other users' classes and availability (privacy issue).</p> -->
+<table class="table">
+  <thead><tr><th>Username</th><th>Name</th><th>Classes</th></tr></thead>
+  <tbody>
+    {% for p in profiles %}
+      <tr>
+        <td><a href="{{ url_for('profEdit', username=p.username) }}">@{{ p.username }}</a></td>
+        <td><a href="{{ url_for('profEdit', username=p.username) }}">{{ p.name }}</a></td>
+        <td>{{ p.classes|join(', ') }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

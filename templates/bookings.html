@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Bookings</h1>
+<table class="table">
+  <thead><tr><th>Class</th><th>Day</th><th>Start</th><th>End</th><th>Room</th><th>Participants</th><th>Created</th></tr></thead>
+  <tbody>
+  {% for b in bookings %}
+    <tr>
+      <td>{{ b.class_name }}</td>
+      <td>{{ b.day }}</td>
+      <td>{{ b.start }}</td>
+      <td>{{ b.end }}</td>
+      <td>{{ b.room }}</td>
+      <td>{{ b.participants|join(', ') }}</td>
+      <td>{{ b.created_at }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

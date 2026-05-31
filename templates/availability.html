@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>Availability Visualisation</h1>
+{% if not vm %}
+  <p>Please <a href="/login">login</a> to view your availability overlay.</p>
+{% else %}
+  <h3>User: {{ vm.username }}</h3>
+  <table class="table">
+    <thead>
+      <tr><th>Day</th><th>09:00</th><th>09:30</th><th>10:00</th><th>10:30</th><th>11:00</th><th>11:30</th><th>12:00</th><th>12:30</th><th>13:00</th><th>13:30</th><th>14:00</th><th>14:30</th><th>15:00</th><th>15:30</th><th>16:00</th><th>16:30</th><th>17:00</th></tr>
+    </thead>
+    <tbody>
+      {% for row in vm.grid %}
+      <tr>
+        <td>{{ row.day }}</td>
+        {% for cell in row.cells %}
+          {% if cell == 'B' %}
+            <td style="background:#ffd6d6">B</td>
+          {% elif cell == 'A' %}
+            <td style="background:#d6ffd6">A</td>
+          {% elif cell == 'AB' %}
+            <td style="background:#d6e0ff">AB</td>
+          {% else %}
+            <td></td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p><strong>Legend:</strong> A = Available (from profile), B = Booked (from bookings)</p>
+{% endif %}
+{% endblock %}

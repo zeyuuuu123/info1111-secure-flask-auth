@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Inbox</h1>
+
+{% if unread and unread > 0 %}
+  <p><strong>{{ unread }}</strong> unread notification{{ 's' if unread != 1 else '' }}.</p>
+  <form method="post" action="{{ url_for('inbox_mark_all_read') }}" style="margin-bottom: 12px;">
+    <button type="submit">Mark all as read</button>
+  </form>
+{% else %}
+  <p>All caught up!</p>
+{% endif %}
+
+<ul class="inbox-list">
+  {% for n in notes %}
+    <li class="inbox-item {{ 'unread' if not n.read }}">
+      <div class="meta"><strong>{{ n.created_at }}</strong></div>
+      <div>{{ n.message }}</div>
+      <div class="inbox-actions">
+        {% if not n.read %}
+          <form method="post" action="{{ url_for('inbox_mark_read') }}">
+            <input type="hidden" name="id" value="{{ n.id }}">
+            <input type="hidden" name="action" value="read">
+            <button type="submit">Mark read</button>
+          </form>
+        {% else %}
+          <form method="post" action="{{ url_for('inbox_mark_read') }}">
+            <input type="hidden" name="id" value="{{ n.id }}">
+            <input type="hidden" name="action" value="unread">
+            <button type="submit">Mark unread</button>
+          </form>
+        {% endif %}
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Profile</h1>
+{% if not user %}
+<p>Please <a href="/login">login</a>.</p>
+{% else %}
+<form method="post">
+  <label>Name</label>
+  <input type="text" name="name" value="{{ user.name }}">
+  <label>Classes (comma-separated, case-sensitive)</label>
+  <input type="text" name="classes" value="{{ user.classes }}">
+  <label>Date of Birth</label>
+  <input type="text" name="dob" value="{{ user.dob }}">
+  <label>Address</label>
+  <input type="text" name="address" value="{{ user.address }}">
+  <label>Availability (one per line, e.g., Mon 10:00-12:00)</label>
+  <textarea name="availability" rows="4">{{ user.availability_text }}</textarea>
+  <button type="submit">Save</button>
+</form>
+{% endif %}
+{% endblock %}

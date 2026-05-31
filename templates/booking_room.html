@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>New Booking — Choose Room</h1>
+<p class="notice">Step 4 of 4 — Choose a room from the list below.</p>
+{% if rooms %}
+<form method="post" action="/bookings/new/room">
+  {% for r in rooms %}
+    <div>
+      <label><input type="radio" name="room" value="{{ r }}"> {{ r }}</label>
+    </div>
+  {% endfor %}
+  <button type="submit">Create Booking</button>
+  <a href="/bookings/new">Cancel / Restart</a>
+</form>
+{% else %}
+  <p>No rooms available at the selected time. You may Cancel/Restart.</p>
+  <a href="/bookings/new">Cancel / Restart</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>Login</h1>
+<!-- <p class="notice">No rate limiting. Sessions never expire unless you close the browser.</p> -->
+<form method="post">
+  <label>Username</label>
+  <input type="text" name="username" required>
+  <label>Password</label>
+  <input type="password" name="password" required>
+  <button type="submit">Login</button>
+</form>
+<p>Or <a href="/signup">create an account</a>.</p>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% endblock %}

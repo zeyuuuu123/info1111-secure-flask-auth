@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h1>New Booking — Select People</h1>
+<p class="notice">Step 2 of 4 — Choose participants from class {{ class_name }}</p>
+<form method="post" action="/bookings/new/people">
+  {% if candidates %}
+    {% for p in candidates %}
+      <div>
+        <label><input type="checkbox" name="people" value="{{ p.username }}"> {{ p.name }} ({{ p.username }})</label>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No candidates found in this class. You can still proceed with no participants.</p>
+  {% endif %}
+  <button type="submit">Next</button>
+  <a href="/bookings/new">Cancel / Restart</a>
+</form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>New Booking — Choose Time</h1>
+<p class="notice">Step 3 of 4 — Choose a <strong>custom start–end</strong> range in 30‑minute steps inside any mutual block.</p>
+
+{% if blocks and blocks|length > 0 %}
+  {% for b in blocks %}
+    <div style="border:1px solid #eee; padding:10px; border-radius:6px; margin-bottom:10px;">
+      <div><strong>{{ b.day }}</strong> {{ b.start }}–{{ b.end }}</div>
+      <form method="post" action="{{ url_for('booking_choose_time') }}" style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <input type="hidden" name="day" value="{{ b.day }}">
+        <label>Start:
+          <select name="start" required>
+            {% for s in b.start_options %}
+              <option value="{{ s }}">{{ s }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>End:
+          <select name="end" required>
+            {% for e in b.end_options %}
+              <option value="{{ e }}">{{ e }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="submit">Use this range</button>
+      </form>
+    </div>
+  {% endfor %}
+  <a href="{{ url_for('booking_start') }}">Cancel / Restart</a>
+{% else %}
+  <p>No mutual availability found. You may Cancel/Restart and choose different people.</p>
+  <a href="{{ url_for('booking_start') }}">Cancel / Restart</a>
+{% endif %}
+{% endblock %}

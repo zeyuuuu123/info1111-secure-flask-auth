@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or 'Skills App' }}</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav class="nav">
+      <!-- Left group: user + notifications + quick tabs -->
+      <div class="nav-left">
+        <!-- Person/user menu -->
+        <div class="menu">
+          <button class="icon-btn menu-toggle" aria-label="User menu" title="User">
+            <!-- person icon (inline SVG to avoid external deps) -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zM4 20a8 8 0 0 1 16 0v2H4v-2z"/>
+            </svg>
+            <span class="chev">▾</span>
+          </button>
+          <div class="dropdown-menu">
+            {% if session.username %}
+              <a class="dropdown-item" href="{{ url_for('profile') }}">My Profile</a>
+              <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+              <form class="dropdown-form" method="post" action="{{ url_for('login') }}">
+                <div class="form-row">
+                  <label for="dd-username">Username</label>
+                  <input id="dd-username" type="text" name="username" required>
+                </div>
+                <div class="form-row">
+                  <label for="dd-password">Password</label>
+                  <input id="dd-password" type="password" name="password" required>
+                </div>
+                <div class="muted small">
+                  <a class="inline-link" href="{{ url_for('forgot') }}">Forgot your password?</a>
+                </div>
+
+                <button type="submit" class="btn">Login</button>
+
+                <div class="muted small">
+                  or
+                  <a class="inline-link" href="{{ url_for('signup') }}">create an account</a>
+                </div>
+
+              </form>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- notifications -->
+        <a class="nav-link notify_bell" href="{{ url_for('inbox') }}" aria-label="Inbox">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 24a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 24zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V6a1.5 1.5 0 0 0-3 0v.68C7.64 7.36 6 9.92 6 13v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          {% if unread_count and unread_count > 0 %}
+            <span class="badge">{{ unread_count }}</span>
+          {% endif %}
+        </a>
+        
+        <!-- Availability -->
+        <a class="nav-link" href="/availability">Availability</a>
+
+        <!-- Bookings dropdown -->
+        <div class="menu">
+          <button class="nav-link menu-toggle" aria-label="Bookings menu">
+            Bookings <span class="chev">▾</span>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/bookings/new">New Booking</a>
+            <a class="dropdown-item" href="/bookings">My Bookings</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right group: search (no preview; submits on Enter) -->
+      <form class="search" action="{{ url_for('profile_search') }}" method="get">
+        <input id="profile-search" name="query" type="text"
+              placeholder="Search profiles…" autocomplete="off" />
+      </form>
+    </nav>
+  </div>
+</header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <script src="/static/js/header.js"></script>
+</body>
+</html>
