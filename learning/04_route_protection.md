@@ -28,6 +28,26 @@ What I understood after reviewing the resources:
 
 The application already checks login for some routes, such as `/inbox`, but other private or user-specific pages are still reachable while logged out. For example, `/profile` renders a page asking the user to log in, and `/profiles` exposes the profile list route without requiring an authenticated session.
 
+## Baseline Test Evidence
+
+Before adding route protection, I tested several private or user-specific routes while logged out using Flask's test client.
+
+```text
+/profile: status=200, location=none
+/profiles: status=200, location=none
+/profiles/search?query=tjones01: status=200, location=none
+/bookings: status=200, location=none
+/bookings/new: status=200, location=none
+/inbox: status=302, location=/login
+/availability: status=200, location=none
+public /: status=200
+public /login: status=200
+public /signup: status=200
+public /forgot: status=200
+```
+
+This baseline shows inconsistent protection. `/inbox` already redirects logged-out users to `/login`, but several other private routes return HTTP 200 while logged out.
+
 ## Planned Code Change
 
 This step will only add login-required route protection:
