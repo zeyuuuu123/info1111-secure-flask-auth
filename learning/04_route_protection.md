@@ -67,6 +67,36 @@ This step will only add login-required route protection:
 | RP3 | Log in and visit protected routes. | The route is accessible after authentication. |
 | RP4 | Log out and revisit a protected route. | The route redirects to `/login` again. |
 
+## Test Evidence After Change
+
+After adding the `login_required` decorator, I tested logged-out protected routes, public routes, logged-in protected routes, and access after logout. I created a dedicated local test user, `routetest01`, through `/signup` for the logged-in route checks.
+
+```text
+RP1 logged_out_protected_routes:
+/profile: status=302, location=/login
+/profiles: status=302, location=/login
+/profiles/search?query=tjones01: status=302, location=/login
+/bookings: status=302, location=/login
+/bookings/new: status=302, location=/login
+/inbox: status=302, location=/login
+/availability: status=302, location=/login
+RP2 logged_out_public_routes:
+/: status=200
+/login: status=200
+/signup: status=200
+/forgot: status=200
+RP3 logged_in_protected_routes:
+/profile: status=200, location=none
+/profiles: status=200, location=none
+/bookings: status=200, location=none
+/bookings/new: status=200, location=none
+/inbox: status=200, location=none
+/availability: status=200, location=none
+RP4 after_logout_profile: status=302, location=/login
+```
+
+These results show that protected routes now redirect logged-out users to `/login`, public routes remain available, authenticated users can still access protected pages, and logout removes access again.
+
 ## Reflection Placeholder
 
 Reflection will be completed after implementation and testing.
