@@ -94,6 +94,12 @@ PR5 request_log_preview:
 
 These results show that `/forgot` now displays a reset-request form, returns the same generic message for an existing and non-existing username, and does not expose passwords or password hashes in the HTTP response.
 
-## Reflection Placeholder
+## Reflection
 
-Reflection will be completed after implementation and testing.
+This step helped me understand that password recovery is a separate security problem from password storage. After implementing password hashing, the system no longer stores plaintext passwords, but the recovery route still needed to be fixed because exposing password hashes is also unsafe. A secure recovery feature should not reveal either the original password or the stored hash.
+
+The most important idea I learned was that password recovery should be based on a reset process, not a retrieval process. In the original version, `/forgot` behaved as if the system could simply return the password file. That was unsafe before password hashing because it revealed plaintext passwords, and it would still be unsafe after password hashing because it would reveal password hashes. The revised version avoids this by showing a reset-request form and returning a generic response.
+
+The tests were useful because they checked both security and information leakage. PR2 confirmed that the password file is no longer returned. PR3 and PR4 were especially important because they checked that existing and non-existing usernames receive the same generic message. This matters because a password recovery system should avoid revealing whether a particular account exists. PR5 confirmed that the system can still record a reset request without exposing credentials in the HTTP response.
+
+One limitation of this implementation is that it is still a simplified learning-app version of password recovery. It records reset requests, but it does not implement a complete production-grade reset process with single-use tokens, expiry times, email delivery, rate limiting, or audit controls. However, for this learning cycle, the main goal was to remove credential disclosure and understand the no-disclosure pattern used in safer recovery flows.
