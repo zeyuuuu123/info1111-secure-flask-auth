@@ -97,6 +97,12 @@ After the code change, I will test:
 ![Wrong password rejected](../evidence/password_hashing/wrong_login.png)
 
 
-## Reflection Placeholder
+## Reflection
 
-Reflection will be completed after implementation and testing.
+This step helped me understand that secure password handling is not just about hiding the password file from users. The deeper issue is that the application should not store the original password at all. In the baseline version, the password was written directly into `data/passwords.txt`, so anyone with access to that file could read the user's credential. After implementing password hashing, the stored value is now a structured hash rather than the original password, which means the original password is no longer directly recoverable from the credential file.
+
+I also learned that password hashing changes both storage and login verification. It was not enough to update the sign-up process to store a hash. The login process also had to change from direct string comparison to hash verification. This made the relationship between generate_password_hash() and check_password_hash() clearer: one function prepares the stored credential, while the other checks whether a later submitted password matches it.
+
+The tests were important because they checked both security and functionality. PH1 showed that the password is no longer stored in plaintext. PH2 showed that a legitimate user can still log in with the correct password, so the security change did not break normal authentication. PH3 showed that an incorrect password is rejected, which confirms that the verification logic still enforces authentication correctly.
+
+One limitation is that this step only improves password storage and login verification for newly created or correctly migrated accounts. It does not yet solve other authentication and authorisation problems in the application, such as unsafe password recovery, unauthenticated access to protected routes, or one user accessing another user's profile. Those issues need to be handled in later learning cycles.
