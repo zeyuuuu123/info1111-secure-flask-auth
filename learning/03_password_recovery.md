@@ -69,6 +69,28 @@ hmitchell01:hmitchell01123
 
 This confirms that the baseline recovery behaviour exposes credential data directly. It also shows why password recovery needs a separate fix even after password hashing: a recovery route should not expose the credential store at all.
 
+## Test Evidence After Change
+
+After replacing password-file download with a reset-request flow, I tested the route again with the Flask test client.
+
+```text
+PR2 forgot_get_status: 200
+PR2 forgot_get_has_form: True
+PR2 forgot_get_discloses_credentials: False
+PR3 existing_user_status: 200
+PR3 existing_user_generic_message: True
+PR3 existing_user_discloses_credentials: False
+PR4 fake_user_status: 200
+PR4 fake_user_same_generic_message: True
+PR4 fake_user_discloses_credentials: False
+PR5 request_log_entries: 2
+PR5 request_log_preview:
+{"username": "tjones01", "requested_at": "18:45 -01/06/2026"}
+{"username": "doesnotexist01", "requested_at": "18:45 -01/06/2026"}
+```
+
+These results show that `/forgot` now displays a reset-request form, returns the same generic message for an existing and non-existing username, and does not expose passwords or password hashes in the HTTP response.
+
 ## Reflection Placeholder
 
 Reflection will be completed after implementation and testing.

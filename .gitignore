@@ -9,6 +9,7 @@ data/passwords.txt
 data/profiles/
 data/bookings.jsonl
 data/notifications.jsonl
+data/password_reset_requests.jsonl
 data/diag.log.jsonl
 
 .DS_Store
