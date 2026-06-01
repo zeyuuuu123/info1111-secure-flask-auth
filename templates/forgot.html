@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Password reset request</h2>
+{% if message %}
+  <p class="notice">{{ message }}</p>
+{% endif %}
+<form method="post">
+  <label>Username</label>
+  <input type="text" name="username" required>
+  <button type="submit">Request password reset</button>
+</form>
+{% endblock %}

@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, url_for, session, send_file, Response, abort
+from flask import Flask, render_template, request, redirect, url_for, session, abort
 import os, json, csv
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
@@ -14,6 +14,7 @@ PROFILES_DIR = DATA_DIR / 'profiles'
 PASSWORDS_FILE = DATA_DIR / 'passwords.txt'
 BOOKINGS_FILE = DATA_DIR / 'bookings.jsonl'
 NOTES_FILE = DATA_DIR / 'notifications.jsonl'
+PASSWORD_RESET_REQUESTS_FILE = DATA_DIR / 'password_reset_requests.jsonl'
 ROOMS_CSV = DATA_DIR / 'rooms.csv'
 
 APP_MODE = os.getenv('APP_MODE', 'local')
@@ -316,11 +317,17 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('home'))
 
-@app.route('/forgot')
+@app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
-    if PASSWORDS_FILE.exists():
-        return send_file(PASSWORDS_FILE, mimetype='text/plain')
-    return Response('No passwords file found', mimetype='text/plain')
+    message = None
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        Append_Jsonl(PASSWORD_RESET_REQUESTS_FILE, {
+            'username': username,
+            'requested_at': datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=11))).strftime('%H:%M -%d/%m/%Y')
+        })
+        message = 'If this account exists, a password reset request has been recorded.'
+    return render_template('forgot.html', message=message)
 
 # Signup/Profile
 @app.route('/signup', methods=['GET', 'POST'])
