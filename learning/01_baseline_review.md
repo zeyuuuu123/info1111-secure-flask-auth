@@ -19,6 +19,8 @@
     
 -   Flask documentation on sessions: used to connect the app's `session["username"]` behaviour with authenticated state.
     
+-   Flask testing documentation: used to understand the Flask test client, which can send requests to the application in a controlled local test without manually using the browser for every route.
+    
 
 After reviewing these resources, I understood that authentication security is not one isolated change. It includes password storage, login verification, recovery behaviour, route protection, and authorisation decisions. A system can appear to have a working login feature while still being insecure if passwords are exposed, sessions are weakly managed, or authenticated users can access resources they do not own.
 
@@ -37,7 +39,7 @@ The provided Flask application has several weaknesses relevant to my learning to
 
 ## Baseline Test Evidence
 
-These results were produced using a Flask test client in a local controlled deployment of the provided codebase. The tests used dummy accounts only and did not interact with real user data.
+These results were produced using Flask's test client in a local controlled deployment of the provided codebase. The test client is a Flask testing tool that can send requests such as `GET /forgot` or `GET /profile` directly to the application and inspect the response status and body. The tests used dummy accounts only and did not interact with real user data.
 
 ```text
 plaintext_password_file: OBSERVED

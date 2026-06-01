@@ -13,6 +13,7 @@
 
 - OWASP Forgot Password Cheat Sheet: used to understand why forgot-password flows should use reset requests, consistent responses, and no credential disclosure.
 - OWASP Authentication Cheat Sheet: used as supporting guidance that authentication features should avoid leaking sensitive credential information.
+- Flask testing documentation: used to understand Flask's test client, which can send GET and POST requests to routes such as `/forgot` without manually opening the browser each time.
 
 What I understood after reviewing the resources:
 
@@ -57,6 +58,8 @@ This step will only change password recovery behaviour:
 ## Baseline Test Evidence
 
 Before changing the `/forgot` route, I tested the existing behaviour with the Flask test client.
+
+For this evidence, the Flask test client was useful because it allowed me to inspect the HTTP status code and response body directly. This made it easy to check whether the response accidentally included credential data.
 
 ```text
 PR1 baseline_forgot_status: 200
