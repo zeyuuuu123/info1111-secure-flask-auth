@@ -1,0 +1,11 @@
+/profile: status=200, location=none
+/profiles: status=200, location=none
+/profiles/search?query=tjones01: status=200, location=none
+/bookings: status=200, location=none
+/bookings/new: status=200, location=none
+/inbox: status=302, location=/login
+/availability: status=200, location=none
+public /: status=200
+public /login: status=200
+public /signup: status=200
+public /forgot: status=200

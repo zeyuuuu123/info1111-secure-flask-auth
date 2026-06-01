@@ -32,6 +32,11 @@ The application already checks login for some routes, such as `/inbox`, but othe
 
 Before adding route protection, I tested several private or user-specific routes while logged out using Flask's test client.
 
+Evidence files:
+
+- Test script: `../evidence/route_protection/test_route_protection.py`
+- Baseline captured output: `../evidence/route_protection/baseline_unauthenticated_routes.txt`
+
 ```text
 /profile: status=200, location=none
 /profiles: status=200, location=none
@@ -70,6 +75,8 @@ This step will only add login-required route protection:
 ## Test Evidence After Change
 
 After adding the `login_required` decorator, I tested logged-out protected routes, public routes, logged-in protected routes, and access after logout. I created a dedicated local test user, `routetest01`, through `/signup` for the logged-in route checks.
+
+Captured output file: `../evidence/route_protection/protected_route_results.txt`
 
 ```text
 RP1 logged_out_protected_routes:

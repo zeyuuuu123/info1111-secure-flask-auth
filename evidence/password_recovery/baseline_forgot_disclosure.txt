@@ -1,0 +1,6 @@
+PR1 baseline_forgot_status: 200
+PR1 baseline_discloses_credential_data: True
+PR1 baseline_response_preview:
+tjones01:tjones01123
+mscott01:mscott01123
+hmitchell01:hmitchell01123

@@ -41,6 +41,11 @@ The provided Flask application has several weaknesses relevant to my learning to
 
 These results were produced using Flask's test client in a local controlled deployment of the provided codebase. The test client is a Flask testing tool that can send requests such as `GET /forgot` or `GET /profile` directly to the application and inspect the response status and body. The tests used dummy accounts only and did not interact with real user data.
 
+Evidence files:
+
+- Test script: `../evidence/baseline_review/test_baseline_review.py`
+- Captured output: `../evidence/baseline_review/baseline_review_results.txt`
+
 ```text
 plaintext_password_file: OBSERVED
 forgot_discloses_password_file: OBSERVED

@@ -72,6 +72,11 @@ After the code change, I will test:
 
 **Screenshot folder**: `evidence/password_hashing/`
 
+Additional reproducible evidence:
+
+- Test script: `../evidence/password_hashing/test_password_hashing.py`
+- Captured output: `../evidence/password_hashing/password_hashing_results.txt`
+
 ### PH1: Stored Password Is Hashed
 
 **Result**: Pass

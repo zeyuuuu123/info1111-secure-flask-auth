@@ -1,0 +1,13 @@
+PR2 forgot_get_status: 200
+PR2 forgot_get_has_form: True
+PR2 forgot_get_discloses_credentials: False
+PR3 existing_user_status: 200
+PR3 existing_user_generic_message: True
+PR3 existing_user_discloses_credentials: False
+PR4 fake_user_status: 200
+PR4 fake_user_same_generic_message: True
+PR4 fake_user_discloses_credentials: False
+PR5 request_log_entries: 2
+PR5 request_log_preview:
+{"username": "tjones01", "requested_at": "18:45 -01/06/2026"}
+{"username": "doesnotexist01", "requested_at": "18:45 -01/06/2026"}

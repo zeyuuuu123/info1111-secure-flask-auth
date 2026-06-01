@@ -61,6 +61,11 @@ Before changing the `/forgot` route, I tested the existing behaviour with the Fl
 
 For this evidence, the Flask test client was useful because it allowed me to inspect the HTTP status code and response body directly. This made it easy to check whether the response accidentally included credential data.
 
+Evidence files:
+
+- Test script: `../evidence/password_recovery/test_password_recovery.py`
+- Baseline captured output: `../evidence/password_recovery/baseline_forgot_disclosure.txt`
+
 ```text
 PR1 baseline_forgot_status: 200
 PR1 baseline_discloses_credential_data: True
@@ -75,6 +80,8 @@ This confirms that the baseline recovery behaviour exposes credential data direc
 ## Test Evidence After Change
 
 After replacing password-file download with a reset-request flow, I tested the route again with the Flask test client.
+
+Captured output file: `../evidence/password_recovery/recovery_no_disclosure_results.txt`
 
 ```text
 PR2 forgot_get_status: 200

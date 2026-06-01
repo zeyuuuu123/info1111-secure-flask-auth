@@ -1,0 +1,10 @@
+plaintext_password_file: OBSERVED
+forgot_discloses_password_file: OBSERVED
+profile_logged_out_not_redirected: OBSERVED
+profiles_logged_out_accessible: OBSERVED
+plaintext_login_succeeds: OBSERVED
+cross_user_profile_route_accessible: OBSERVED
+forgot_status: 200
+profile_logged_out_status: 200
+profiles_logged_out_status: 200
+other_profile_status: 200
