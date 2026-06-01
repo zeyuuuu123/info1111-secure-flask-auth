@@ -97,6 +97,12 @@ RP4 after_logout_profile: status=302, location=/login
 
 These results show that protected routes now redirect logged-out users to `/login`, public routes remain available, authenticated users can still access protected pages, and logout removes access again.
 
-## Reflection Placeholder
+## Reflection
 
-Reflection will be completed after implementation and testing.
+This step helped me understand that authentication needs to be enforced at the route level, not only through the user interface. Before this change, some pages did show login-related messages, but the server still returned several private or user-specific routes with HTTP `200` while the user was logged out. That meant the application behaviour was inconsistent: `/inbox` already redirected logged-out users to `/login`, while routes such as `/profile`, `/profiles`, `/bookings`, and `/availability` did not consistently do the same.
+
+The most important design idea I learned was the value of a reusable `login_required` decorator. Instead of writing a separate `if not session.get("username")` check inside every route, the decorator centralises the authentication check and makes the intended protection clearer. This is easier to maintain and reduces the chance that future private routes will accidentally be left unprotected.
+
+The tests were useful because they checked both sides of the change. RP1 confirmed that logged-out users are redirected away from protected routes. RP2 confirmed that public routes such as `/`, `/login`, `/signup`, and `/forgot` remain available without login, so the change did not accidentally block normal public access. RP3 confirmed that authenticated users can still use the protected pages, and RP4 confirmed that logout removes access again. This combination of tests was important because a security fix should not only block unauthorised access; it should also preserve legitimate access.
+
+One limitation is that this step only handles authentication, not full authorisation. After this change, the application can check whether a user is logged in, but it does not yet fully check whether the logged-in user is allowed to access a specific resource. For example, a logged-in user may still attempt to access another user's profile route. That is a different problem: authentication identifies the user, while authorisation decides what that user is permitted to do.
