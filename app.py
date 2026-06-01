@@ -5,7 +5,7 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from time import perf_counter
 import uuid
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # where the app stores data files (profiles, passwords, bookings, notifications, rooms)
 APP_ROOT = Path(__file__).parent
@@ -300,7 +300,7 @@ def login():
     error = None
     if request.method == 'POST':
         username = request.form.get('username', ''); password = request.form.get('password', ''); pw_map = passwords_map()
-        if username in pw_map and pw_map[username] == password:
+        if username in pw_map and check_password_hash(pw_map[username], password):
             session['username'] = username
             prof = load_profile(username)
             if prof:
