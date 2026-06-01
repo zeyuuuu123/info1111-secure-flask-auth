@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, a
 import os, json, csv
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
+from functools import wraps
 from time import perf_counter
 import uuid
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -75,6 +76,15 @@ def passwords_map():
 def set_pwd(username, password):
     with open(PASSWORDS_FILE, 'a', encoding='utf-8') as fh:
         fh.write(f"{username}:{generate_password_hash(password)}\n")
+
+
+def login_required(view_func):
+    @wraps(view_func)
+    def wrapped(*args, **kwargs):
+        if not session.get('username'):
+            return redirect(url_for('login'))
+        return view_func(*args, **kwargs)
+    return wrapped
 
 
 
@@ -371,10 +381,9 @@ def signup():
     return render_template('signup.html', error=error)
 
 @app.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     username = session.get('username')
-    if not username:
-        return render_template('profile.html', user=None)
     prof = load_profile(username)
     if request.method == 'POST':
         name = request.form.get('name', prof.get('name', ''))
@@ -405,6 +414,7 @@ def profile():
         'availability_text': '\n'.join([f"{a['day']} {a['start']}-{a['end']}" for a in prof.get('availability', [])])}
     return render_template('profile.html', user=user_vm)
 @app.route('/profile/<username>', methods=['GET', 'POST'])
+@login_required
 def profEdit(username):
     # Load or create a minimal profile if missing
     prof = load_profile(username) or {
@@ -449,11 +459,13 @@ def profEdit(username):
     return render_template('profile.html', user=user_vm)
 # Profiles
 @app.route('/profiles')
+@login_required
 def profiles():
     profiles = list_pr()
     return render_template('profiles.html', profiles=profiles)
 
 @app.route('/profiles/search')
+@login_required
 def profile_search():
     query = request.args.get('query', '')
     fmt = request.args.get('format', '').lower()
@@ -479,6 +491,7 @@ def profile_search():
 
 # Bookings (M2)
 @app.route('/bookings')
+@login_required
 def my_bookings():
     username = session.get('username')
     bs = []
@@ -488,11 +501,13 @@ def my_bookings():
     return render_template('bookings.html', bookings=bs)
 
 @app.route('/bookings/new')
+@login_required
 def booking_start():
     session.pop('booking_draft', None)
     return render_template('booking_start.html')
 
 @app.route('/bookings/new/class', methods=['POST'])
+@login_required
 def booking_choose_class():
     class_name = request.form.get('class_name','')
     session['booking_draft'] = {'class_name': class_name, 'people': [], 'slot': None}
@@ -503,6 +518,7 @@ def booking_choose_class():
     return render_template('booking_people.html', class_name=class_name, candidates=candidates)
 
 @app.route('/bookings/new/people', methods=['POST'])
+@login_required
 def booking_choose_people():
     draft = session.get('booking_draft', {})
     people = request.form.getlist('people')
@@ -526,6 +542,7 @@ def booking_choose_people():
     return render_template('booking_time.html', blocks=blocks)
 
 @app.route('/bookings/new/time', methods=['POST'])
+@login_required
 def booking_choose_time():
     draft = session.get('booking_draft', {})
     
@@ -593,6 +610,7 @@ def booking_choose_time():
     return render_template('booking_room.html', rooms=avail)
 
 @app.route('/bookings/new/room', methods=['POST'])
+@login_required
 def booking_choose_room():
     draft = session.get('booking_draft', {})
     room = request.form.get('room')
@@ -629,34 +647,30 @@ def booking_choose_room():
 
 # Notifications
 @app.route('/inbox')
+@login_required
 def inbox():
     username = session.get('username')
-    if not username:
-        return redirect(url_for('login'))
     notes, unread = get_user_notifications(username)
     return render_template('inbox.html', notes=notes, unread=unread)
 @app.route('/inbox/read', methods=['POST'])
+@login_required
 def inbox_mark_read():
     username = session.get('username')
-    if not username:
-        return redirect(url_for('login'))
     note_id = request.form.get('id', '')
     action = request.form.get('action', 'read')  # 'read' or 'unread'
     set_notification_read(username, note_id, read=(action == 'read'))
     return redirect(url_for('inbox'))
 @app.route('/inbox/read-all', methods=['POST'])
+@login_required
 def inbox_mark_all_read():
     username = session.get('username')
-    if not username:
-        return redirect(url_for('login'))
     set_all_notifications_read(username, read=True)
     return redirect(url_for('inbox'))
 # M3: Availability visualisation (non-persistent overlay)
 @app.route('/availability')
+@login_required
 def availability():
     username = session.get('username')
-    if not username:
-        return render_template('availability.html', vm=None)
     prof = load_profile(username)
     a_slots = parse_availability_slots(prof.get('availability', [])) if prof else set()
     b_slots = set()
