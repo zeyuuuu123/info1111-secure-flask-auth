@@ -61,11 +61,40 @@ This step will only change password storage and login verification:
 ## Test Plan
 
 After the code change, I will test:
+
 | ID | Test | Expected result |
 | -- | ---- | --------------- |
 | PH1 | Create a new user and inspect `data/passwords.txt`. | The stored value is a Werkzeug hash, not the original password. |
 | PH2 | Log in with the correct password for that user. | Login still succeeds. |
 | PH3 | Log in with an incorrect password for that user. | Login fails, and no session is created. |
+
+## Test Evidence
+
+**Screenshot folder**: `evidence/password_hashing/`
+
+### PH1: Stored Password Is Hashed
+
+**Result**: Pass
+
+**Explanation**: After signing up as the test user **alicetan01**, the stored password is no longer directly readable in `data/passwords.txt`.
+
+![Stored password hash](../evidence/password_hashing/password_file_hash.png)
+
+### PH2: Correct Password Still Logs In
+
+**Result**: Pass
+
+**Explanation**: Password hashing should not prevent a legitimate user from logging in with the correct password. Here we logged in using the correct password and successfully loaded the profile page.
+
+![Correct password login](../evidence/password_hashing/correct_login.png)
+
+### PH3: Wrong Password Is Rejected
+
+**Result**: Pass
+
+**Explanation**: A submitted password that does not match the stored hash should be rejected. Here, we used the incorrect password for the test user, and the login was rejected.
+
+![Wrong password rejected](../evidence/password_hashing/wrong_login.png)
 
 
 ## Reflection Placeholder
