@@ -5,6 +5,7 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from time import perf_counter
 import uuid
+from werkzeug.security import generate_password_hash
 
 # where the app stores data files (profiles, passwords, bookings, notifications, rooms)
 APP_ROOT = Path(__file__).parent
@@ -72,7 +73,7 @@ def passwords_map():
 
 def set_pwd(username, password):
     with open(PASSWORDS_FILE, 'a', encoding='utf-8') as fh:
-        fh.write(f"{username}:{password}\n")
+        fh.write(f"{username}:{generate_password_hash(password)}\n")
 
 
 
