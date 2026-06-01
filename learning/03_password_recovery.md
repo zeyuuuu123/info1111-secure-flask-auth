@@ -54,6 +54,21 @@ This step will only change password recovery behaviour:
 | PR4 | Submit a non-existing username. | The same generic no-disclosure message is shown. |
 | PR5 | Inspect reset request storage. | The request is recorded without exposing passwords or hashes in the response. |
 
+## Baseline Test Evidence
+
+Before changing the `/forgot` route, I tested the existing behaviour with the Flask test client.
+
+```text
+PR1 baseline_forgot_status: 200
+PR1 baseline_discloses_credential_data: True
+PR1 baseline_response_preview:
+tjones01:tjones01123
+mscott01:mscott01123
+hmitchell01:hmitchell01123
+```
+
+This confirms that the baseline recovery behaviour exposes credential data directly. It also shows why password recovery needs a separate fix even after password hashing: a recovery route should not expose the credential store at all.
+
 ## Reflection Placeholder
 
 Reflection will be completed after implementation and testing.
