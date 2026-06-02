@@ -27,6 +27,24 @@ What I understood after reviewing the resources:
 
 The `/profile/<username>` route now requires login, but it does not yet check whether the requested profile username matches the logged-in username. This means a logged-in user may still request another user's profile route directly.
 
+## Baseline Test Evidence
+
+Before adding the ownership check, I tested direct cross-user profile access using Flask's test client. The test created two local users, logged in as User A, and requested User B's profile route.
+
+Evidence files:
+
+- Test script: `../evidence/profile_authorisation/test_profile_authorisation.py`
+- Baseline captured output: `../evidence/profile_authorisation/baseline_cross_user_profile_access.txt`
+
+```text
+PA1 baseline_user_a_accesses_user_b_profile: status=200, location=none
+PA1 baseline_cross_user_route_reachable: True
+PA_own_profile_status: 200
+PA_logged_out_profile_status: status=302, location=/login
+```
+
+This shows that route-level login protection is working for logged-out users, but a logged-in user can still reach another user's profile route. That is an authorisation weakness rather than an authentication weakness.
+
 ## Planned Code Change
 
 This step will only add a profile ownership check:

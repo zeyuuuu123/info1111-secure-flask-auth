@@ -1,0 +1,4 @@
+PA1 baseline_user_a_accesses_user_b_profile: status=200, location=none
+PA1 baseline_cross_user_route_reachable: True
+PA_own_profile_status: 200
+PA_logged_out_profile_status: status=302, location=/login
