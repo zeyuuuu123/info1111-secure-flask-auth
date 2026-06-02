@@ -24,7 +24,7 @@ SEED_ON_START = os.getenv('SEED_ON_START', 'false').lower() == 'true'
 
 # create the app
 app = Flask(__name__)
-app.secret_key = 'dev-secret-key' 
+app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key')
 
 # --------------- Helpers ---------------
 
