@@ -32,6 +32,24 @@ app.secret_key = 'dev-secret-key'
 
 This is weak because every clone or deployment of the app shares the same session signing secret unless the source code is manually changed.
 
+## Baseline Test Evidence
+
+Before changing the configuration, I inspected the source and runtime secret key.
+
+Evidence files:
+
+- Test script: `../evidence/session_secret/test_session_secret_config.py`
+- Baseline captured output: `../evidence/session_secret/baseline_hard_coded_secret.txt`
+
+```text
+SK1 baseline_source_contains_dev_secret: True
+SK1 baseline_runtime_secret_key: dev-secret-key
+SK1 env_example_exists: False
+SK1 env_file_ignored_in_gitignore: True
+```
+
+This confirms that the baseline application uses the hard-coded `dev-secret-key`. It also shows that `.env` is ignored, but there is not yet an example file documenting the expected `SECRET_KEY` setting.
+
 ## Planned Code Change
 
 This step will only change session secret configuration:
