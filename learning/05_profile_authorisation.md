@@ -63,6 +63,20 @@ This step will only add a profile ownership check:
 | PA3 | Log in as User A and request `/profile/UserA`. | Response is HTTP `200`. |
 | PA4 | Request `/profile/UserA` while logged out. | Response redirects to `/login`. |
 
+## Test Evidence After Change
+
+After adding the ownership check, I reran the profile authorisation script.
+
+Captured output file: `../evidence/profile_authorisation/profile_ownership_results.txt`
+
+```text
+PA_cross_user_profile: status=403, location=none
+PA_own_profile: status=200, location=none
+PA_logged_out_profile: status=302, location=/login
+```
+
+These results show that a logged-in user can no longer access another user's profile route, while still being able to access their own profile route. Logged-out users are still redirected to `/login` by the earlier route-protection check.
+
 ## Reflection Placeholder
 
 Reflection will be completed after implementation and testing.
