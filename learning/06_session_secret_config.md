@@ -68,6 +68,23 @@ This step will only change session secret configuration:
 | SK3 | Start/import the app without `SECRET_KEY`. | Flask still has a local development fallback. |
 | SK4 | Inspect git status. | `.env` is ignored and `.env.example` is tracked. |
 
+## Test Evidence After Change
+
+After changing the app to read `SECRET_KEY` from the environment, I reran the session-secret configuration script.
+
+Captured output file: `../evidence/session_secret/session_secret_config_results.txt`
+
+```text
+SK_source_contains_hard_coded_dev_secret: False
+SK_source_reads_secret_key_env: True
+SK_env_example_exists: True
+SK_env_file_ignored_in_gitignore: True
+SK_configured_runtime_secret_key: test-secret-from-environment
+SK_fallback_runtime_secret_key: dev-secret-key
+```
+
+These results show that the source code no longer assigns the hard-coded secret directly, the app can use an environment-provided `SECRET_KEY`, `.env.example` documents the required setting, and `.env` remains ignored by git.
+
 ## Reflection Placeholder
 
 Reflection will be completed after implementation and testing.
