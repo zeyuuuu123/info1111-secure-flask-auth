@@ -77,6 +77,14 @@ PA_logged_out_profile: status=302, location=/login
 
 These results show that a logged-in user can no longer access another user's profile route, while still being able to access their own profile route. Logged-out users are still redirected to `/login` by the earlier route-protection check.
 
-## Reflection Placeholder
+## Reflection
 
-Reflection will be completed after implementation and testing.
+This step helped me understand the practical difference between authentication and authorisation. In the previous learning cycle, I added login-required route protection, which meant the system could check whether a user was logged in. However, the baseline test for this cycle showed that this was still not enough: a logged-in user could request another user's profile route and receive HTTP `200`. This showed that authentication answers only "who is logged in", while authorisation answers "is this user allowed to access this specific resource?"
+
+The main design lesson was that authorisation must be enforced on the server side. It is not enough to hide profile links in templates or rely on normal user behaviour, because a user can still type or construct a URL such as `/profile/UserB` directly. The route itself must compare the requested profile with the authenticated identity stored in `session["username"]`.
+
+The tests were useful because they separated three different cases. The cross-user test confirmed that User A now receives HTTP `403 Forbidden` when trying to access User B's profile. The own-profile test confirmed that the change did not break legitimate access to User A's own profile. The logged-out test confirmed that the earlier login-required protection still works, because logged-out users are redirected to `/login`. Testing all three cases was important because a correct authorisation change should block unauthorised access while preserving authorised access.
+
+One limitation of this implementation is that it only handles a simple ownership rule for profile routes. It does not implement a full role-based access-control system, such as an administrator role that may manage multiple users. However, this is appropriate for this learning cycle because the application's current profile model does not define an administrative role. Adding one would be a separate design decision rather than a direct fix to the observed weakness.
+
+This change also improved how I think about route design. I now see protected routes as needing two separate layers. First, an authentication check to ensure that the user is logged in. Second, an authorisation check to ensure that the logged-in user is allowed to access the requested resource. The next focused change should be session configuration, because the application still relies on a hard-coded secret key, which is another part of secure session-based authentication.
