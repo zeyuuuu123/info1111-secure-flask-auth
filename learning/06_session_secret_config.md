@@ -85,6 +85,12 @@ SK_fallback_runtime_secret_key: dev-secret-key
 
 These results show that the source code no longer assigns the hard-coded secret directly, the app can use an environment-provided `SECRET_KEY`, `.env.example` documents the required setting, and `.env` remains ignored by git.
 
-## Reflection Placeholder
+## Reflection
 
-Reflection will be completed after implementation and testing.
+This step showed me that session security depends on configuration as well as login logic. Since Flask uses the secret key to sign session cookies, keeping it hard-coded in the source code is unsafe because the same value may be reused or exposed.
+
+The main improvement was moving `SECRET_KEY` into environment-based configuration. This makes the real secret environment-specific and keeps it out of version control. Adding `.env.example` also documents the required setting without exposing the actual secret.
+
+The tests confirmed that the source code no longer directly assigns the old hard-coded secret, the app can read `SECRET_KEY` from the environment, `.env.example` exists, and `.env` remains ignored by git.
+
+One limitation is that the app still has a development fallback so it can run locally. A real deployment should always provide a strong secret through the environment. This step also does not cover other cookie settings such as `Secure`, `HttpOnly`, or `SameSite`.
