@@ -416,6 +416,9 @@ def profile():
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profEdit(username):
+    if session.get('username') != username:
+        abort(403)
+
     # Load or create a minimal profile if missing
     prof = load_profile(username) or {
         'username': username, 'name': '', 'classes': [], 'availability': [],
